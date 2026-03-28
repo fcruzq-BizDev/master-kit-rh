@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Master Kit de RH – Francisco Cruz Quintanilla</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0b0e13;
+      --surface: #12161e;
+      --surface2: #1a2030;
+      --gold: #c9963b;
+      --gold-light: #e8b85a;
+      --gold-pale: rgba(201,150,59,0.12);
+      --white: #f4f1eb;
+      --muted: #7a8499;
+      --danger: #e05c5c;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.6;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 5vw;
+      background: rgba(11,14,19,0.88); backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(201,150,59,0.12);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--gold); }
+    .logo span { color: var(--white); }
+    nav a.cta-nav {
+      background: var(--gold); color: #000; font-weight: 600; font-size: 0.85rem;
+      padding: 0.55rem 1.4rem; border-radius: 2px; text-decoration: none; letter-spacing: 0.04em; transition: background 0.2s;
+    }
+    nav a.cta-nav:hover { background: var(--gold-light); }
+
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 8rem 5vw 5rem; position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: ''; position: absolute; top: -20%; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 900px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,150,59,0.13) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: var(--gold-pale); border: 1px solid rgba(201,150,59,0.3);
+      border-radius: 100px; padding: 0.35rem 1rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em;
+      color: var(--gold-light); text-transform: uppercase;
+      margin-bottom: 2.2rem; animation: fadeUp 0.7s ease both;
+    }
+    .hero-eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(1.4); } }
+    h1 {
+      font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 7vw, 5.8rem);
+      font-weight: 900; line-height: 1.06; letter-spacing: -0.02em; max-width: 820px;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    h1 em { font-style: italic; color: var(--gold); }
+    .hero-sub {
+      margin-top: 1.6rem; font-size: clamp(1rem, 2vw, 1.2rem); color: var(--muted);
+      max-width: 580px; line-height: 1.7; font-weight: 300; animation: fadeUp 0.7s 0.2s ease both;
+    }
+    .hero-ctas { margin-top: 2.8rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; animation: fadeUp 0.7s 0.3s ease both; }
+    .btn-primary {
+      background: var(--gold); color: #000; font-weight: 700; font-size: 1rem;
+      padding: 1rem 2.4rem; border-radius: 3px; text-decoration: none; letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,150,59,0.35); }
+    .btn-ghost {
+      background: transparent; color: var(--white); font-weight: 500; font-size: 1rem;
+      padding: 1rem 2.4rem; border-radius: 3px; border: 1px solid rgba(255,255,255,0.2);
+      text-decoration: none; transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+    .author-bar { margin-top: 3.5rem; display: flex; align-items: center; gap: 1rem; animation: fadeUp 0.7s 0.4s ease both; }
+    .author-avatar {
+      width: 52px; height: 52px; border-radius: 50%; background: var(--surface2);
+      border: 2px solid rgba(201,150,59,0.4); display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--gold);
+    }
+    .author-info { text-align: left; }
+    .author-name { font-weight: 600; font-size: 0.95rem; }
+    .author-role { font-size: 0.82rem; color: var(--muted); }
+
+    .stats-bar { background: var(--surface); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2.5rem 5vw; }
+    .stats-bar-inner { max-width: 900px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 3rem; }
+    .stat-item { text-align: center; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2.6rem; font-weight: 900; color: var(--gold); line-height: 1; }
+    .stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 0.3rem; }
+
+    section { padding: 6rem 5vw; }
+    .section-label { display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.9rem; }
+    h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.02em; }
+    h2 em { font-style: italic; color: var(--gold); }
+
+    .pain { background: var(--surface); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .pain-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .pain-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; margin-top: 2rem; }
+    .pain-list li { display: flex; align-items: flex-start; gap: 0.9rem; font-size: 1rem; color: var(--muted); line-height: 1.6; }
+    .pain-list li::before { content: '✗'; color: var(--danger); font-weight: 700; font-size: 1.1rem; flex-shrink: 0; margin-top: 0.05em; }
+    .pain-visual { background: var(--surface2); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 2rem; position: relative; overflow: hidden; }
+    .pain-visual::before { content: ''; position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(224,92,92,0.12) 0%, transparent 70%); }
+    .chaos-word { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 2.5vw, 2.4rem); font-weight: 900; color: rgba(224,92,92,0.2); display: block; line-height: 1.3; }
+    .chaos-word.highlighted { color: rgba(224,92,92,0.7); }
+
+    .included { max-width: 1100px; margin: 0 auto; }
+    .included-header { text-align: center; margin-bottom: 4rem; }
+    .modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .module-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 1.8rem; position: relative; overflow: hidden; transition: border-color 0.3s, transform 0.3s; }
+    .module-card:hover { border-color: rgba(201,150,59,0.4); transform: translateY(-4px); }
+    .module-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); opacity: 0; transition: opacity 0.3s; }
+    .module-card:hover::before { opacity: 1; }
+    .module-num { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); opacity: 0.7; margin-bottom: 0.5rem; }
+    .module-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.8rem; }
+    .module-docs { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
+    .module-docs li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.84rem; color: var(--muted); line-height: 1.45; }
+    .module-docs li::before { content: '→'; color: var(--gold); flex-shrink: 0; }
+    .module-badge { display: inline-block; margin-top: 1.1rem; font-size: 0.75rem; font-weight: 600; color: var(--gold); background: var(--gold-pale); border: 1px solid rgba(201,150,59,0.25); padding: 0.2rem 0.7rem; border-radius: 100px; }
+
+    .bonus-row { margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .bonus-card { background: linear-gradient(135deg, rgba(201,150,59,0.08), rgba(201,150,59,0.03)); border: 1px solid rgba(201,150,59,0.25); border-radius: 8px; padding: 1.6rem; }
+    .bonus-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .bonus-card h4 { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .bonus-card p { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+
+    .features { background: var(--surface); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .features-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .features-list { display: flex; flex-direction: column; gap: 1.6rem; margin-top: 2rem; }
+    .feature-item { display: flex; gap: 1rem; align-items: flex-start; }
+    .feature-check { width: 28px; height: 28px; border-radius: 50%; background: var(--gold-pale); border: 1px solid rgba(201,150,59,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.1em; color: var(--gold); font-size: 0.75rem; font-weight: 700; }
+    .feature-item h4 { font-weight: 600; margin-bottom: 0.25rem; font-size: 1rem; }
+    .feature-item p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+    .author-card { background: var(--surface2); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 2.5rem; position: relative; overflow: hidden; }
+    .author-card::after { content: ''; position: absolute; bottom: -60px; right: -60px; width: 250px; height: 250px; border-radius: 50%; background: radial-gradient(circle, rgba(201,150,59,0.1) 0%, transparent 70%); }
+    .author-card-avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--gold-pale); border: 2px solid rgba(201,150,59,0.4); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--gold); margin-bottom: 1.2rem; }
+    .author-card h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .author-card .author-title { font-size: 0.82rem; color: var(--gold); font-weight: 600; margin-bottom: 1rem; }
+    .author-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+    .author-quote { margin-top: 1.4rem; padding: 1rem 1.2rem; border-left: 3px solid var(--gold); font-style: italic; font-size: 0.9rem; color: var(--white); line-height: 1.65; }
+
+    .testimonials { max-width: 1100px; margin: 0 auto; }
+    .testimonials-header { text-align: center; margin-bottom: 3.5rem; }
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .testi-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 1.8rem; position: relative; }
+    .testi-card::before { content: '"'; position: absolute; top: 1rem; right: 1.5rem; font-family: 'Playfair Display', serif; font-size: 5rem; line-height: 1; color: rgba(201,150,59,0.12); font-weight: 900; }
+    .stars { color: var(--gold); font-size: 0.85rem; margin-bottom: 0.9rem; }
+    .testi-card p { font-size: 0.92rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.4rem; }
+    .testi-author { display: flex; align-items: center; gap: 0.8rem; }
+    .testi-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; color: var(--gold); }
+    .testi-name { font-weight: 600; font-size: 0.9rem; }
+    .testi-role { font-size: 0.78rem; color: var(--muted); }
+
+    .pricing-section { background: var(--surface); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .pricing-inner { max-width: 820px; margin: 0 auto; text-align: center; }
+    .pricing-card { margin-top: 3rem; background: var(--bg); border: 1px solid rgba(201,150,59,0.35); border-radius: 12px; padding: 3rem; position: relative; overflow: hidden; }
+    .pricing-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); }
+    .pricing-badge { display: inline-block; background: var(--gold); color: #000; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.3rem 1rem; border-radius: 100px; margin-bottom: 1.5rem; }
+    .price-old { text-decoration: line-through; color: var(--muted); font-size: 1.3rem; }
+    .price-main { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 8vw, 5.5rem); font-weight: 900; color: var(--gold); line-height: 1; margin: 0.3rem 0; }
+    .price-currency { font-size: 1.8rem; vertical-align: super; }
+    .price-note { font-size: 0.9rem; color: var(--muted); margin-bottom: 2rem; }
+    .includes-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; text-align: left; margin: 2rem 0; }
+    .inc-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.88rem; color: var(--muted); }
+    .inc-item span { color: var(--gold); font-weight: 700; }
+    .guarantee { margin-top: 2rem; padding: 1.2rem; background: var(--gold-pale); border: 1px solid rgba(201,150,59,0.2); border-radius: 6px; font-size: 0.88rem; color: var(--white); }
+    .guarantee strong { color: var(--gold); }
+
+    .faq-inner { max-width: 720px; margin: 0 auto; }
+    .faq-header { text-align: center; margin-bottom: 3rem; }
+    .faq-item { border-bottom: 1px solid rgba(255,255,255,0.08); padding: 1.4rem 0; }
+    .faq-question { font-weight: 600; font-size: 1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; user-select: none; }
+    .faq-question::after { content: '+'; font-size: 1.4rem; color: var(--gold); transition: transform 0.2s; flex-shrink: 0; }
+    .faq-item.open .faq-question::after { transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+    .faq-item.open .faq-answer { max-height: 300px; padding-top: 0.9rem; }
+
+    footer { text-align: center; padding: 3rem 5vw; border-top: 1px solid rgba(255,255,255,0.06); color: var(--muted); font-size: 0.85rem; }
+    footer .foot-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      .pain-inner, .features-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .includes-list, .bonus-row { grid-template-columns: 1fr; }
+      .pain-visual { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Master Kit <span>de RH</span></div>
+    <a href="#pricing" class="cta-nav">Obtener el Kit →</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-eyebrow">Por Francisco Cruz Quintanilla · 20+ años en RH corporativo</div>
+    <h1>18 documentos para<br/><em>blindar y profesionalizar</em><br/>tu área de RH.</h1>
+    <p class="hero-sub">Contratos, políticas, guías de entrevista, onboarding, evaluación de desempeño y más. Todo listo para usar desde el primer día.</p>
+    <div class="hero-ctas">
+      <a href="#pricing" class="btn-primary">Quiero el Master Kit — $697 MXN</a>
+      <a href="#included" class="btn-ghost">Ver qué incluye</a>
+    </div>
+    <div class="author-bar">
+      <div class="author-avatar">FC</div>
+      <div class="author-info">
+        <div class="author-name">Francisco Cruz Quintanilla</div>
+        <div class="author-role">Recursos Humanos · Más de 20 años en el sector corporativo</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stats-bar-inner">
+      <div class="stat-item reveal"><div class="stat-num">18</div><div class="stat-label">documentos listos para usar</div></div>
+      <div class="stat-item reveal"><div class="stat-num">5</div><div class="stat-label">módulos estratégicos</div></div>
+      <div class="stat-item reveal"><div class="stat-num">20+</div><div class="stat-label">años de experiencia del autor</div></div>
+      <div class="stat-item reveal"><div class="stat-num">100%</div><div class="stat-label">editable en Word</div></div>
+    </div>
+  </div>
+
+  <section class="pain">
+    <div class="pain-inner">
+      <div>
+        <span class="section-label">El problema</span>
+        <h2>Sin estructura,<br/><em>cada contratación<br/>es un riesgo.</em></h2>
+        <ul class="pain-list">
+          <li>Empleados trabajando sin contrato firmado — cada día sin papel es una bomba de tiempo legal</li>
+          <li>Periodos de prueba que vencen sin evaluación documentada, y el colaborador queda en plantilla sin que puedas hacer nada</li>
+          <li>Actas administrativas mal levantadas que no sirven como evidencia ante una demanda</li>
+          <li>Onboardings improvisados que dañan la primera impresión del talento nuevo</li>
+          <li>Sin política de home office ni código de conducta cuando el conflicto ya estalló</li>
+        </ul>
+      </div>
+      <div class="pain-visual reveal">
+        <span class="chaos-word">Sin contrato</span>
+        <span class="chaos-word">Demandas</span>
+        <span class="chaos-word highlighted">Improvisación</span>
+        <span class="chaos-word">Alta rotación</span>
+        <span class="chaos-word">Conflictos</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="included">
+    <div class="included">
+      <div class="included-header reveal">
+        <span class="section-label">Contenido del Kit</span>
+        <h2>5 módulos. 18 documentos.<br/><em>Un sistema completo.</em></h2>
+        <p style="color:var(--muted);margin-top:1rem;font-size:1rem;max-width:520px;margin-left:auto;margin-right:auto;">Cada documento fue creado y probado en campo por el autor durante más de 20 años de práctica corporativa.</p>
+      </div>
+
+      <div class="modules-grid">
+        <div class="module-card reveal">
+          <div class="module-num">Módulo 01</div>
+          <h3>Base Legal y Contratación</h3>
+          <ul class="module-docs">
+            <li>Contrato de tiempo indeterminado</li>
+            <li>Contrato de tiempo determinado</li>
+            <li>Contrato por obra determinada</li>
+            <li>Convenio de Confidencialidad (NDA)</li>
+            <li>Reglamento Interior de Trabajo (RIT)</li>
+            <li>Carta de Renuncia Voluntaria y Finiquito</li>
+          </ul>
+          <span class="module-badge">6 documentos</span>
+        </div>
+
+        <div class="module-card reveal">
+          <div class="module-num">Módulo 02</div>
+          <h3>Reclutamiento y Bienvenida</h3>
+          <ul class="module-docs">
+            <li>Perfil y Descripción de Puesto</li>
+            <li>Guía de Entrevistas — Filtro de Diamantes</li>
+            <li>Checklist de Contratación (Expediente)</li>
+            <li>Manual de Bienvenida (Onboarding)</li>
+          </ul>
+          <span class="module-badge">4 documentos</span>
+        </div>
+
+        <div class="module-card reveal">
+          <div class="module-num">Módulo 03</div>
+          <h3>Gestión Diaria y Operación</h3>
+          <ul class="module-docs">
+            <li>Solicitud de Vacaciones y Permisos</li>
+            <li>Política de Teletrabajo (Home Office)</li>
+            <li>Acta Administrativa de Hechos</li>
+          </ul>
+          <span class="module-badge">3 documentos</span>
+        </div>
+
+        <div class="module-card reveal">
+          <div class="module-num">Módulo 04</div>
+          <h3>Cultura y Bienestar</h3>
+          <ul class="module-docs">
+            <li>Código de Ética y Conducta Profesional</li>
+            <li>Encuesta de Clima Laboral (Anual)</li>
+          </ul>
+          <span class="module-badge">2 documentos</span>
+        </div>
+
+        <div class="module-card reveal">
+          <div class="module-num">Módulo 05</div>
+          <h3>Desempeño y Crecimiento</h3>
+          <ul class="module-docs">
+            <li>Evaluación de Desempeño (individual)</li>
+          </ul>
+          <span class="module-badge">1 documento</span>
+        </div>
+      </div>
+
+      <div class="bonus-row">
+        <div class="bonus-card reveal">
+          <div class="bonus-label">🎁 Bonus incluido</div>
+          <h4>Guía Estratégica de Implementación</h4>
+          <p>El complemento indispensable. Te dice exactamente cómo y cuándo usar cada documento para evitar errores costosos. Incluye "Tips Pro" directos de 20 años en campo.</p>
+        </div>
+        <div class="bonus-card reveal">
+          <div class="bonus-label">🗺️ Bonus incluido</div>
+          <h4>Mapa de Ruta del Kit</h4>
+          <p>Una guía visual de los cinco pilares para implementar en orden. La recomendación del autor: siempre empieza por el blindaje legal (Módulo 1) y construye desde ahí.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="features-inner">
+      <div class="reveal">
+        <span class="section-label">Por qué funciona</span>
+        <h2>No es una plantilla genérica.<br/><em>Es experiencia destilada.</em></h2>
+        <div class="features-list">
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <div>
+              <h4>Alineado a la Ley Federal del Trabajo</h4>
+              <p>Contratos, RIT y finiquito redactados conforme a la LFT vigente en México, minimizando tu exposición ante una demanda laboral.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <div>
+              <h4>100% editable en Word y PDF</h4>
+              <p>Solo abre el archivo, reemplaza los campos [EMPRESA] con tus datos y listo. Sin consultores ni diseñadores.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <div>
+              <h4>Probado en empresas reales</h4>
+              <p>Cada formato fue usado y refinado por el autor durante más de dos décadas de práctica en el sector corporativo mexicano.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <div>
+              <h4>Guía de implementación incluida</h4>
+              <p>Sabes qué documento usar, cuándo usarlo y cómo evitar los errores más comunes — con los "secretos de trinchera" del autor.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="author-card reveal">
+        <div class="author-card-avatar">FC</div>
+        <h3>Francisco Cruz Quintanilla</h3>
+        <div class="author-title">Ejecutivo de Recursos Humanos · Autor del Kit</div>
+        <p>Con más de 20 años de experiencia en Recursos Humanos, Francisco diseñó y aplicó estos documentos en entornos reales, ayudando a empresas a profesionalizar sus áreas de RH sin depender de consultores externos.</p>
+        <blockquote class="author-quote">
+          "Tener el formato es el 50% del trabajo; saber aplicarlo para evitar una demanda o motivar a un empleado es el otro 50%. En esta guía comparto mis secretos de trinchera para que tú no cometas los errores que yo vi cometer a otros."
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="testimonials">
+      <div class="testimonials-header reveal">
+        <span class="section-label">Testimonios</span>
+        <h2>Lo que dicen quienes<br/><em>ya lo usan</em></h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card reveal">
+          <div class="stars">★★★★★</div>
+          <p>El Reglamento Interior de Trabajo ya estaba desactualizado hace años. Con el Kit lo adapté en una tarde y nuestro abogado quedó sorprendido con la calidad del documento.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">AL</div>
+            <div><div class="testi-name">Andrea L.</div><div class="testi-role">Directora de RH · Empresa de manufactura</div></div>
+          </div>
+        </div>
+        <div class="testi-card reveal">
+          <div class="stars">★★★★★</div>
+          <p>La Guía de Entrevistas "Filtro de Diamantes" cambió completamente cómo reclutamos. Ya no improvisamos preguntas y los resultados en los primeros 90 días mejoraron notablemente.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">MR</div>
+            <div><div class="testi-name">Miguel R.</div><div class="testi-role">Gerente de Capital Humano · Startup tecnológica</div></div>
+          </div>
+        </div>
+        <div class="testi-card reveal">
+          <div class="stars">★★★★★</div>
+          <p>Teníamos empleados en home office sin ninguna política escrita. Con el Módulo 3 implementamos la política en un día. Vale mucho más de lo que cuesta.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">SG</div>
+            <div><div class="testi-name">Sofía G.</div><div class="testi-role">Coordinadora RH · Servicios profesionales</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing-section" id="pricing">
+    <div class="pricing-inner">
+      <div class="reveal">
+        <span class="section-label">Precio de lanzamiento</span>
+        <h2>Una sola inversión.<br/><em>Documentos para siempre.</em></h2>
+        <p style="color:var(--muted);margin-top:1rem;font-size:1rem;">Descarga inmediata · Editable en Word · Sin suscripciones</p>
+      </div>
+	<div class="pricing-card reveal">
+ 	 <div class="pricing-badge">🔥 Precio de lanzamiento por tiempo limitado</div>
+ 	 <div class="price-old">Valor real: $1,497 MXN</div>
+ 	 <div class="price-main"><span class="price-currency">$</span>697</div>
+ 	 <div class="price-note">MXN · Pago único · Acceso inmediato de por vida</div>
+  
+ 	 <a href="https://pay.hotmart.com/J105026257N?checkoutMode=10" class="btn-primary" style="display:block;text-align:center;font-size:1.05rem;padding:1.1rem;">
+ 	   Quiero el Master Kit de RH →
+ 	 </a>
+        <div class="includes-list">
+          <div class="inc-item"><span>✓</span> 18 documentos editables</div>
+          <div class="inc-item"><span>✓</span> 5 módulos estratégicos</div>
+          <div class="inc-item"><span>✓</span> Contratos (3 modalidades)</div>
+          <div class="inc-item"><span>✓</span> NDA + RIT + Finiquito</div>
+          <div class="inc-item"><span>✓</span> Guía de Implementación PDF</div>
+          <div class="inc-item"><span>✓</span> Manual de Onboarding</div>
+          <div class="inc-item"><span>✓</span> Evaluación de Desempeño</div>
+          <div class="inc-item"><span>✓</span> Mapa de Ruta del Kit</div>
+        </div>
+        <div class="guarantee">
+          <strong>🛡️ Garantía de 7 días sin riesgo.</strong> Si sientes que el kit no era lo que esperabas, te devolvemos el 100% de tu inversión. Sin preguntas.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="faq-inner">
+      <div class="faq-header reveal">
+        <span class="section-label">Preguntas frecuentes</span>
+        <h2>Resuelve tus dudas<br/><em>antes de comprar</em></h2>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question">¿Los documentos aplican para México?</div>
+        <div class="faq-answer">Sí. Todos los documentos legales (contratos, Reglamento Interior de Trabajo, finiquito) están redactados conforme a la Ley Federal del Trabajo vigente. Se recomienda revisarlos con tu asesor legal antes de firmarlos.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question">¿Cómo recibo el Kit después de comprar?</div>
+        <div class="faq-answer">Inmediatamente después del pago recibes un enlace de descarga con el archivo ZIP organizado por módulos. Puedes guardarlo en tu equipo o en Google Drive y empezar desde el mismo día.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question">¿Necesito conocimientos legales para usarlo?</div>
+        <div class="faq-answer">No. Cada documento incluye campos en corchetes [EMPRESA] que solo debes reemplazar con tus datos. La Guía Estratégica de Implementación te explica cuándo y cómo usar cada uno. Para contratos y RIT, una revisión final con tu abogado es recomendable.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question">¿Los archivos son editables o son PDF bloqueados?</div>
+        <div class="faq-answer">Son 100% editables. Contratos, políticas y formatos vienen en Word (.docx). La Guía de Entrevistas viene en PDF diseñado para imprimir y usar directamente. Nada bloqueado.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question">¿Funciona para empresas pequeñas o solo para corporativos?</div>
+        <div class="faq-answer">Fue diseñado para que cualquier empresa, desde 3 empleados hasta 500, pueda profesionalizar su área de RH sin un equipo grande ni consultores externos. Muchos clientes son dueños de PyMEs que llevan RH ellos mismos.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-logo">Master Kit de RH</div>
+    <p>Por Francisco Cruz Quintanilla · © 2026 · Todos los derechos reservados</p>
+    <p style="margin-top:0.5rem;">
+      <a href="#" style="color:var(--muted);text-decoration:none;margin:0 0.5rem;">Términos de uso</a> ·
+      <a href="#" style="color:var(--muted);text-decoration:none;margin:0 0.5rem;">Aviso de privacidad</a> ·
+      <a href="#" style="color:var(--muted);text-decoration:none;margin:0 0.5rem;">Contacto</a>
+    </p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => q.parentElement.classList.toggle('open'));
+    });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
